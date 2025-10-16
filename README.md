@@ -31,5 +31,119 @@ Key themes:
 
 Install dependencies via pip (run in a virtual environment):
 
-```bash
-pip install flask PyPDF2 sentence-transformers numpy scikit-learn groq streamlit serpapi datetime json
+Projects
+1. PDF RAG Application (RAG.py)
+A Flask-based web app for Retrieval-Augmented Generation (RAG) on PDFs. Extracts text, chunks it, embeds with Sentence Transformers, retrieves relevant chunks via cosine similarity, and generates answers using Groq's Llama 3 model.
+Setup & Run
+
+Ensure Flask and dependencies are installed.
+Run: python RAG.py
+Open http://127.0.0.1:5000/ in your browser.
+Upload a PDF via /upload, then query it via /query (POST JSON with {"query": "your question"}).
+
+Features
+
+Text extraction and chunking (500-word chunks).
+Semantic retrieval (top-3 matches).
+Groq-powered response generation.
+Logging for debugging.
+
+Example Usage
+
+Upload: curl -F "pdf=@your_file.pdf" http://127.0.0.1:5000/upload
+Query: curl -X POST -H "Content-Type: application/json" -d '{"query": "What is the main topic?"}' http://127.0.0.1:5000/query
+
+2. AI Appointment Scheduler (Booking_Agent.py)
+A Streamlit app for booking appointments with AI confirmation. Users input details, and Groq generates a professional summary/email-style response.
+Setup & Run
+
+Install Streamlit: pip install streamlit groq.
+Run: streamlit run Booking_Agent.py
+Open the provided local URL.
+
+Features
+
+Dark-themed UI with input fields (name, email, date, time, type, notes).
+Groq integration for natural language confirmation.
+Expandable summary section.
+Responsive design for mobile/desktop.
+
+Example
+Enter details and click "Confirm Booking" to see AI-generated confirmation like: "Your consultation is booked for John Doe on 2025-10-16 at 2:00 PM."
+3. Product Info Agent (1_Agent.py)
+A simple console script that queries Groq for product details (e.g., iPhone 15) and returns structured JSON (name, price, availability, rating).
+Setup & Run
+
+Install: pip install groq.
+Run: python 1_Agent.py
+
+It defaults to querying "iPhone 15"; modify the get_product_info() call for other products.
+
+
+
+Features
+
+JSON output for easy parsing/integration.
+Low-temperature generation for factual responses.
+Error handling for JSON parsing.
+
+Example Output
+json{
+  "product_name": "iPhone 15",
+  "price": "$799",
+  "availability": "In stock",
+  "rating": "4.8/5"
+}
+4. Web Search Agent (3_WebSearch_Agent.py)
+A console-based agent that performs Google searches via SerpAPI, summarizes top results, and generates insightful responses with Groq.
+Setup & Run
+
+Install: pip install groq google-search-results (SerpAPI wrapper).
+Set serpapi_key in the script (or env var).
+Run: python 3_WebSearch_Agent.py
+
+Enter a query when prompted (e.g., "latest AI news").
+
+
+
+Features
+
+Top-5 search snippets for context.
+Concise Groq responses with citations.
+Handles unrelated results gracefully.
+
+Example
+Query: "Groq API updates" → Response: "Recent updates include faster inference speeds..."
+5. LLM Prompt Comparator (2_Task.py)
+A Streamlit app comparing LLM outputs: one with just a user prompt, another with a system + user prompt. Highlights how system prompts improve structure and accuracy.
+Setup & Run
+
+Install: pip install streamlit groq.
+Run: streamlit run 2_Task.py
+Enter a prompt (e.g., "Explain SIP vs mutual funds") and click "Run Comparison".
+
+Features
+
+Side-by-side text areas for responses.
+Uses GPT-OSS-20B model.
+Educational tool for prompt engineering.
+
+Example
+
+Without System: Casual explanation.
+With System: Structured bullet points as an "expert."
+
+Contributing
+
+Fork the repo.
+Create a feature branch (git checkout -b feature/amazing-agent).
+Commit changes (git commit -m 'Add new agent').
+Push (git push origin feature/amazing-agent).
+Open a Pull Request.
+
+Security & Best Practices
+
+API Keys: Replace hardcoded keys with dotenv or env vars.
+Rate Limits: Groq has usage quotas; monitor via their dashboard.
+Dependencies: Pin versions in requirements.txt for reproducibility.
+Testing: Add unit tests for agents (e.g., with pytest).
